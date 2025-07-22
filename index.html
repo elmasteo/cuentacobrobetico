@@ -132,6 +132,21 @@ button:hover {
   box-sizing: border-box;
 }
 
+.remove-producto {
+  background: #dc3545;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background 0.3s ease;
+  width: 100%;
+}
+
+.remove-producto:hover {
+  background: #c82333;
+}
 
   </style>
 </head>
@@ -171,13 +186,15 @@ button:hover {
     <h3>Productos</h3>
     <div id="productos" class="productos-container">
       <div class="producto">
-        <label>Cantidad</label>
-        <input name="cantidad" type="number" required>
-        <label>Concepto</label>
-        <input name="concepto" required>
-        <label>Valor</label>
-        <input name="valor" type="number" required>
-      </div>
+      <label>Cantidad</label>
+      <input name="cantidad" type="number" required>
+      <label>Concepto</label>
+      <input name="concepto" required>
+      <label>Valor</label>
+      <input name="valor" type="number" required>
+      <button type="button" class="remove-producto" onclick="eliminarProducto(this)">Eliminar</button>
+    </div>
+
     </div>
 
     <button type="button" class="add-producto" onclick="agregarProducto()">Agregar otro producto</button>
@@ -194,7 +211,6 @@ button:hover {
 
     function agregarProducto() {
       const container = document.getElementById("productos");
-      const index = container.children.length;
       const div = document.createElement("div");
       div.classList.add("producto");
       div.innerHTML = `
@@ -204,11 +220,17 @@ button:hover {
         <input name="concepto" required>
         <label>Valor</label>
         <input name="valor" type="number" required>
+        <button type="button" class="remove-producto" onclick="eliminarProducto(this)">Eliminar</button>
       `;
       container.appendChild(div);
     }
 
-    document.getElementById('cotizacionForm').addEventListener('submit', async (e) => {
+    function eliminarProducto(boton) {
+      const productoDiv = boton.closest('.producto');
+      productoDiv.remove();
+    }
+
+   document.getElementById('cotizacionForm').addEventListener('submit', async (e) => {
       e.preventDefault();
 
       const formData = new FormData(e.target);
