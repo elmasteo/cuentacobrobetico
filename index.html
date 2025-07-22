@@ -207,7 +207,10 @@ button:hover {
 
   <script>
     // Set default date
-    document.querySelector('input[name="fecha"]').valueAsDate = new Date();
+    const hoy = new Date();
+    const offset = hoy.getTimezoneOffset(); // en minutos
+    hoy.setMinutes(hoy.getMinutes() - offset); // corrige desfase
+    document.querySelector('input[name="fecha"]').value = hoy.toISOString().slice(0, 10);
 
     function agregarProducto() {
       const container = document.getElementById("productos");
