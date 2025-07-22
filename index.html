@@ -113,8 +113,7 @@
       drawText(data.concepto, 250, 600);
       drawText(`$ ${valor.toLocaleString()}`, 650, 600);
       if (abono) drawText(`$ ${abono.toLocaleString()}`, 650, 400);
-      drawText(`$ ${valor.toLocaleString()}`, 680, 600);
-      drawText(`$ ${total.toLocaleString()}`, 650, 350);
+      drawText(`$ ${total.toLocaleString()}`, 650, 370);
 
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: 'application/pdf' });
