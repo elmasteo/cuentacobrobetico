@@ -158,7 +158,7 @@ button:hover {
     <input name="fecha" type="date" required>
 
     <label>Consecutivo</label>
-    <input name="consecutivo" type="text" value="31" required>
+    <input name="consecutivo" type="text" placeholder="31" required>
 
     <hr>
     <h3>Empresa</h3>
@@ -172,13 +172,13 @@ button:hover {
     </select>
 
     <label>No Identificación</label>
-    <input name="identificacion" required>
+    <input name="identificacion" type="number" required>
 
     <label>Dirección</label>
     <input name="direccionEmpresa" required>
 
     <label>Teléfono</label>
-    <input name="telefonoEmpresa" required>
+    <input name="telefonoEmpresa" type="number" required>
 
     <label>Ciudad</label>
     <input name="ciudadEmpresa" required>
@@ -202,7 +202,7 @@ button:hover {
     <label>Abono (opcional)</label>
     <input name="abono" type="number">
 
-    <button type="submit">Descargar Cotización</button>
+    <button type="submit">Descargar Cuenta de Cobro</button>
   </form>
 
   <script>
@@ -307,7 +307,11 @@ button:hover {
       const blob = new Blob([pdfBytes], { type: 'application/pdf' });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
-      link.download = 'cotizacion.pdf';
+      const fechaStr = `${anio}${String(mes).padStart(2, '0')}${String(dia).padStart(2, '0')}`;
+      const nombreLimpio = nombreEmpresa.trim().replace(/\s+/g, '_').replace(/[^\w\d_-]/g, '');
+      const nombreArchivo = `CuentaDeCobro-${fechaStr}-${nombreLimpio}.pdf`;
+
+      link.download = nombreArchivo;
       link.click();
     });
   </script>
