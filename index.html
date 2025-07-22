@@ -53,28 +53,6 @@
       const response = await fetch("/.netlify/functions/get-pdf");
       const buffer = await response.arrayBuffer();
       const existingPdfBytes = new Uint8Array(buffer); // 👈 más directo
-
-/*
-      // Validar respuesta por si falla la función
-      if (!base64.startsWith('JVBER')) {
-        alert("Error: el archivo recibido no es un PDF válido.");
-        throw new Error("Respuesta inesperada: " + base64.slice(0, 50));
-      }
-
-      function base64ToUint8Array(base64) {
-        const binaryString = atob(base64.replace(/\s/g, ''));
-        const len = binaryString.length;
-        const bytes = new Uint8Array(len);
-        for (let i = 0; i < len; i++) {
-          bytes[i] = binaryString.charCodeAt(i);
-        }
-        return bytes;
-      }
-
-      const existingPdfBytes = base64ToUint8Array(base64);
-
-*/
-
       const { PDFDocument, rgb } = PDFLib;
       const pdfDoc = await PDFDocument.load(existingPdfBytes);
       const page = pdfDoc.getPages()[0];
@@ -97,12 +75,12 @@
       drawText(data.dia, 120, 950);  // true para mostrar marca
       drawText(data.mes, 165, 950);
       drawText(data.anio, 198, 950);
-      drawText(data.consecutivo, 250, 950);
+      drawText(data.consecutivo, 265, 950);
 
       // Info Empresa Comprador
       drawText(data.nombreEmpresa, 120, 750);
       drawText(data.identificacion, 500, 750);
-      if (data.tipoId === 'cc') drawText('X', 400, 750);
+      if (data.tipoId === 'cc') drawText('X', 390, 750);
       if (data.tipoId === 'nit') drawText('X', 435, 750);
       drawText(data.direccionEmpresa, 180, 713);
       drawText(data.telefonoEmpresa, 390, 713);
@@ -111,9 +89,9 @@
       // Cantidad - Concepto - Valor
       drawText(data.cantidad, 140, 600);
       drawText(data.concepto, 250, 600);
-      drawText(`$ ${valor.toLocaleString()}`, 650, 600);
-      if (abono) drawText(`$ ${abono.toLocaleString()}`, 650, 400);
-      drawText(`$ ${total.toLocaleString()}`, 650, 370);
+      drawText(`$ ${valor.toLocaleString()}`, 655, 600);
+      if (abono) drawText(`$ ${abono.toLocaleString()}`, 655, 400);
+      drawText(`$ ${total.toLocaleString()}`, 655, 370);
 
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: 'application/pdf' });
