@@ -203,8 +203,7 @@ button:hover {
           valor: parseFloat(valorElems[i].value),
         });
       }
-
-      const total = productos.reduce((sum, p) => sum + (p.valor * p.cantidad), 0) - abono;
+      
       const subtotal = productos.reduce((sum, p) => sum + (p.valor * p.cantidad), 0);
       const total = subtotal - abono;
 
