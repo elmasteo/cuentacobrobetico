@@ -52,13 +52,20 @@
 
       const response = await fetch("/.netlify/functions/get-pdf");
       const base64 = await response.text();
-      const binaryString = atob(base64);
-      const len = binaryString.length;
-      const bytes = new Uint8Array(len);
-      for (let i = 0; i < len; i++) {
-        bytes[i] = binaryString.charCodeAt(i);
+
+      // Convertir base64 a Uint8Array de forma segura:
+      function base64ToUint8Array(base64) {
+        const binaryString = atob(base64.replace(/\s/g, ''));
+        const len = binaryString.length;
+        const bytes = new Uint8Array(len);
+        for (let i = 0; i < len; i++) {
+          bytes[i] = binaryString.charCodeAt(i);
+        }
+        return bytes;
       }
-      const existingPdfBytes = bytes;
+
+      const existingPdfBytes = base64ToUint8Array(base64);
+
 
       const { PDFDocument, rgb } = PDFLib;
       const pdfDoc = await PDFDocument.load(existingPdfBytes);

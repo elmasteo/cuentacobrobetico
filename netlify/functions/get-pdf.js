@@ -13,7 +13,7 @@ exports.handler = async () => {
         'Access-Control-Allow-Origin': '*',
       },
       body: file.toString('base64'),
-      isBase64Encoded: true,
+      isBase64Encoded: true, // 👈 esta línea es clave
     };
   } catch (err) {
     return {
