@@ -6,77 +6,98 @@
   <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f4f4f4;
-      padding: 20px;
-      margin: 0;
-    }
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #f9fafb;
+  padding: 20px;
+  margin: 0;
+}
 
-    form {
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      max-width: 500px;
-      margin: auto;
-    }
+form {
+  background: white;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+  max-width: 540px;
+  margin: auto;
+}
 
-    h2, h3 {
-      margin-top: 0;
-    }
+h2, h3 {
+  margin-top: 0;
+  color: #333;
+}
 
-    label {
-      display: block;
-      margin: 12px 0 4px;
-      font-weight: bold;
-    }
+label {
+  display: block;
+  margin: 16px 0 6px;
+  font-weight: 600;
+  color: #444;
+}
 
-    input, select {
-      width: 100%;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-    }
+input, select {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+  background-color: #fff;
+}
 
-    .productos-container > div {
-      border: 1px solid #ccc;
-      padding: 10px;
-      margin-top: 10px;
-      border-radius: 8px;
-    }
+input:focus, select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+  outline: none;
+}
 
-    button {
-      width: 100%;
-      padding: 12px;
-      font-size: 16px;
-      margin-top: 20px;
-      border: none;
-      border-radius: 8px;
-      background: #007bff;
-      color: white;
-      cursor: pointer;
-    }
+.productos-container > div {
+  border: 1px solid #ddd;
+  padding: 14px;
+  margin-top: 12px;
+  border-radius: 12px;
+  background: #fefefe;
+}
 
-    button:hover {
-      background: #0056b3;
-    }
+button {
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+  margin-top: 24px;
+  border: none;
+  border-radius: 12px;
+  background: #007bff;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
 
-    .add-producto {
-      background: #28a745;
-      margin-top: 10px;
-    }
+button:hover {
+  background: #0056b3;
+}
 
-    .add-producto:hover {
-      background: #218838;
-    }
+.add-producto {
+  background: #28a745;
+  margin-top: 10px;
+}
 
-    @media (max-width: 480px) {
-      input, select, button {
-        font-size: 16px;
-      }
-    }
+.add-producto:hover {
+  background: #218838;
+}
+
+@media (max-width: 480px) {
+  form {
+    padding: 20px;
+    border-radius: 12px;
+  }
+
+  input, select, button {
+    font-size: 16px;
+  }
+
+  label {
+    margin-top: 12px;
+  }
+}
   </style>
 </head>
 <body>
@@ -183,7 +204,9 @@
         });
       }
 
-      const total = productos.reduce((sum, p) => sum + p.valor, 0) - abono;
+      const total = productos.reduce((sum, p) => sum + (p.valor * p.cantidad), 0) - abono;
+      const subtotal = productos.reduce((sum, p) => sum + (p.valor * p.cantidad), 0);
+      const total = subtotal - abono;
 
       const response = await fetch("/.netlify/functions/get-pdf");
       const buffer = await response.arrayBuffer();
@@ -221,6 +244,7 @@
       });
 
       if (abono) drawText(`$ ${abono.toLocaleString()}`, 655, 400);
+      drawText(`$ ${subtotal.toLocaleString()}`, 655, 420);
       drawText(`$ ${total.toLocaleString()}`, 655, 370);
 
       const pdfBytes = await pdfDoc.save();
