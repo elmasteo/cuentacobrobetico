@@ -287,19 +287,19 @@ button:hover {
       if (tipoId === 'cc') drawText('X', 390, 750);
       if (tipoId === 'nit') drawText('X', 445, 750);
       drawText(direccionEmpresa, 170, 713);
-      drawText(telefonoEmpresa, 380, 713);
+      drawText(telefonoEmpresa, 360, 713);
       drawText(ciudadEmpresa, 530, 713);
 
       // Productos (espaciados verticalmente)
-      let yBase = 600;
+      let yBase = 630;
       productos.forEach((p, i) => {
-        drawText(p.cantidad, 140, yBase);
+        drawText(p.cantidad, 160, yBase);
         drawText(p.concepto, 250, yBase);
         drawText(`$ ${p.valor.toLocaleString()}`, 655, yBase);
         yBase -= 25;
       });
 
-      if (abono) drawText(`$ ${abono.toLocaleString()}`, 655, 400);
+      if (abono) drawText(`$ ${abono.toLocaleString()}`, 655, 390);
       drawText(`$ ${subtotal.toLocaleString()}`, 655, 420);
       drawText(`$ ${total.toLocaleString()}`, 655, 370);
 
