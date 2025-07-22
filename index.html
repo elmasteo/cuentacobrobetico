@@ -307,11 +307,12 @@ button:hover {
       const blob = new Blob([pdfBytes], { type: 'application/pdf' });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
-      const fechaStr = `${anio}${String(mes).padStart(2, '0')}${String(dia).padStart(2, '0')}`;
+      const fechaStr = `${String(dia).padStart(2, '0')}${String(mes).padStart(2, '0')}${anio}`;
       const nombreLimpio = nombreEmpresa.trim().replace(/\s+/g, '_').replace(/[^\w\d_-]/g, '');
       const nombreArchivo = `CuentaDeCobro-${fechaStr}-${nombreLimpio}.pdf`;
 
       link.download = nombreArchivo;
+
       link.click();
     });
   </script>
