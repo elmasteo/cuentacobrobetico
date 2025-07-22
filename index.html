@@ -95,24 +95,24 @@
 
       // Posiciones ajustadas manualmente sobre el templatev2.pdf
       drawText(data.dia, 120, 950);  // true para mostrar marca
-      drawText(data.mes, 180, 713);
-      drawText(data.anio, 205, 713);
-      drawText(data.consecutivo, 440, 713);
+      drawText(data.mes, 140, 950);
+      drawText(data.anio, 160, 950);
+      drawText(data.consecutivo, 185, 950);
 
       // Info Empresa Comprador
-      drawText(data.nombreEmpresa, 60, 612);
-      drawText(data.identificacion, 240, 612);
+      drawText(data.nombreEmpresa, 120, 700);
+      drawText(data.identificacion, 350, 700);
       if (data.tipoId === 'cc') drawText('X', 185, 613);
       if (data.tipoId === 'nit') drawText('X', 210, 613);
-      drawText(data.direccionEmpresa, 60, 596);
-      drawText(data.telefonoEmpresa, 240, 596);
-      drawText(data.ciudadEmpresa, 380, 596);
+      drawText(data.direccionEmpresa, 180, 713);
+      drawText(data.telefonoEmpresa, 420, 713);
+      drawText(data.ciudadEmpresa, 500, 713);
 
       // Cantidad - Concepto - Valor
-      drawText(data.cantidad, 60, 523);
-      drawText(data.concepto, 110, 523);
-      drawText(`$ ${valor.toLocaleString()}`, 400, 523);
-      if (abono) drawText(`$ ${abono.toLocaleString()}`, 400, 470);
+      drawText(data.cantidad, 130, 540);
+      drawText(data.concepto, 130, 570);
+      drawText(`$ ${valor.toLocaleString()}`, 520, 540);
+      if (abono) drawText(`$ ${abono.toLocaleString()}`, 520, 570);
       drawText(`$ ${total.toLocaleString()}`, 400, 445);
 
       const pdfBytes = await pdfDoc.save();
