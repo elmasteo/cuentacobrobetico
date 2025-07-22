@@ -98,6 +98,25 @@ button:hover {
     margin-top: 12px;
   }
 }
+.productos-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-x: hidden;
+}
+
+.productos-container > div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.productos-container input,
+.productos-container select {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
   </style>
 </head>
 <body>
@@ -203,7 +222,7 @@ button:hover {
           valor: parseFloat(valorElems[i].value),
         });
       }
-      
+
       const subtotal = productos.reduce((sum, p) => sum + (p.valor * p.cantidad), 0);
       const total = subtotal - abono;
 
