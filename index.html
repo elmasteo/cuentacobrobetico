@@ -234,10 +234,7 @@ button:hover {
       e.preventDefault();
 
       const formData = new FormData(e.target);
-      const fecha = new Date(formData.get("fecha"));
-      const dia = fecha.getDate();
-      const mes = fecha.getMonth() + 1;
-      const anio = fecha.getFullYear();
+      const [anio, mes, dia] = formData.get("fecha").split("-").map(Number);
       const consecutivo = formData.get("consecutivo");
 
       const abono = parseFloat(formData.get("abono") || 0);
