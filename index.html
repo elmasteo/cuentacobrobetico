@@ -79,13 +79,23 @@
       const pdfDoc = await PDFDocument.load(existingPdfBytes);
       const page = pdfDoc.getPages()[0];
 
-      const drawText = (text, x, y) => {
+      const drawText = (text, x, y, mark = false) => {
         page.drawText(String(text), { x, y, size: 10, color: rgb(0, 0, 0) });
+        if (mark) {
+          page.drawRectangle({
+            x,
+            y,
+            width: 5,
+            height: 5,
+            color: rgb(1, 0, 0),
+          });
+        }
       };
 
+
       // Posiciones ajustadas manualmente sobre el templatev2.pdf
-      drawText(data.dia, 155, 713);
-      drawText(data.mes, 180, 713);
+      drawText(data.dia, 155, 713, true);  // true para mostrar marca
+      drawText(data.mes, 180, 713, true);
       drawText(data.anio, 205, 713);
       drawText(data.consecutivo, 440, 713);
 
