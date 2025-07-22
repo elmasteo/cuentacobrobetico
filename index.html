@@ -51,9 +51,16 @@
       const total = valor - abono;
 
       const response = await fetch("/.netlify/functions/get-pdf");
-      const base64 = await response.text();
+      const buffer = await response.arrayBuffer();
+      const existingPdfBytes = new Uint8Array(buffer); // 👈 más directo
 
-      // Convertir base64 a Uint8Array de forma segura:
+/*
+      // Validar respuesta por si falla la función
+      if (!base64.startsWith('JVBER')) {
+        alert("Error: el archivo recibido no es un PDF válido.");
+        throw new Error("Respuesta inesperada: " + base64.slice(0, 50));
+      }
+
       function base64ToUint8Array(base64) {
         const binaryString = atob(base64.replace(/\s/g, ''));
         const len = binaryString.length;
@@ -66,6 +73,7 @@
 
       const existingPdfBytes = base64ToUint8Array(base64);
 
+*/
 
       const { PDFDocument, rgb } = PDFLib;
       const pdfDoc = await PDFDocument.load(existingPdfBytes);

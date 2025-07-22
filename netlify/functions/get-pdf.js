@@ -1,19 +1,19 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
 exports.handler = async () => {
   try {
-    const filePath = path.resolve(__dirname, 'templatev2.pdf');
-    const file = fs.readFileSync(filePath);
+    const filePath = path.resolve(__dirname, "templatev2.pdf");
+    const fileBuffer = fs.readFileSync(filePath);
 
     return {
       statusCode: 200,
       headers: {
-        'Content-Type': 'application/pdf',
-        'Access-Control-Allow-Origin': '*',
+        "Content-Type": "application/pdf",
+        "Access-Control-Allow-Origin": "*",
       },
-      body: file.toString('base64'),
-      isBase64Encoded: true, // 👈 esta línea es clave
+      body: fileBuffer.toString("base64"),
+      isBase64Encoded: true, // 👈 clave
     };
   } catch (err) {
     return {
