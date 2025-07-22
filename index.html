@@ -4,92 +4,222 @@
   <meta charset="UTF-8">
   <title>Generar Cotización PDF</title>
   <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #f4f4f4; }
-    input, select { margin: 6px 0; padding: 5px; width: 100%; }
-    button { padding: 10px 20px; background: #007bff; color: #fff; border: none; cursor: pointer; margin-top: 10px; }
-    button:hover { background: #0056b3; }
-    form { max-width: 400px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
+      margin: 0;
+    }
+
+    form {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      max-width: 500px;
+      margin: auto;
+    }
+
+    h2, h3 {
+      margin-top: 0;
+    }
+
+    label {
+      display: block;
+      margin: 12px 0 4px;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    .productos-container > div {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 8px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 8px;
+      background: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    .add-producto {
+      background: #28a745;
+      margin-top: 10px;
+    }
+
+    .add-producto:hover {
+      background: #218838;
+    }
+
+    @media (max-width: 480px) {
+      input, select, button {
+        font-size: 16px;
+      }
+    }
   </style>
 </head>
 <body>
   <form id="cotizacionForm">
     <h2>Generar Cotización</h2>
-    <label>Día <input name="dia" type="number" required></label>
-    <label>Mes <input name="mes" type="number" required></label>
-    <label>Año <input name="anio" type="number" required></label>
-    <label>Consecutivo <input name="consecutivo" type="text" required></label>
+
+    <label>Fecha</label>
+    <input name="fecha" type="date" required>
+
+    <label>Consecutivo</label>
+    <input name="consecutivo" type="text" value="31" required>
 
     <hr>
     <h3>Empresa</h3>
-    <label>Nombre <input name="nombreEmpresa" required></label>
-    <label>
-      Tipo identificación
-      <select name="tipoId">
-        <option value="cc">C.C. No</option>
-        <option value="nit">NIT</option>
-      </select>
-    </label>
-    <label>No Identificación <input name="identificacion" required></label>
-    <label>Dirección <input name="direccionEmpresa" required></label>
-    <label>Teléfono <input name="telefonoEmpresa" required></label>
-    <label>Ciudad <input name="ciudadEmpresa" required></label>
-    <label>Cantidad <input name="cantidad" type="number" required></label>
-    <label>Concepto <input name="concepto" required></label>
-    <label>Valor <input name="valor" type="number" required></label>
-    <label>Abono (opcional) <input name="abono" type="number"></label>
+    <label>Nombre</label>
+    <input name="nombreEmpresa" required>
+
+    <label>Tipo identificación</label>
+    <select name="tipoId">
+      <option value="cc">C.C. No</option>
+      <option value="nit">NIT</option>
+    </select>
+
+    <label>No Identificación</label>
+    <input name="identificacion" required>
+
+    <label>Dirección</label>
+    <input name="direccionEmpresa" required>
+
+    <label>Teléfono</label>
+    <input name="telefonoEmpresa" required>
+
+    <label>Ciudad</label>
+    <input name="ciudadEmpresa" required>
+
+    <h3>Productos</h3>
+    <div id="productos" class="productos-container">
+      <div class="producto">
+        <label>Cantidad</label>
+        <input name="cantidad" type="number" required>
+        <label>Concepto</label>
+        <input name="concepto" required>
+        <label>Valor</label>
+        <input name="valor" type="number" required>
+      </div>
+    </div>
+
+    <button type="button" class="add-producto" onclick="agregarProducto()">Agregar otro producto</button>
+
+    <label>Abono (opcional)</label>
+    <input name="abono" type="number">
 
     <button type="submit">Descargar Cotización</button>
   </form>
 
   <script>
+    // Set default date
+    document.querySelector('input[name="fecha"]').valueAsDate = new Date();
+
+    function agregarProducto() {
+      const container = document.getElementById("productos");
+      const index = container.children.length;
+      const div = document.createElement("div");
+      div.classList.add("producto");
+      div.innerHTML = `
+        <label>Cantidad</label>
+        <input name="cantidad" type="number" required>
+        <label>Concepto</label>
+        <input name="concepto" required>
+        <label>Valor</label>
+        <input name="valor" type="number" required>
+      `;
+      container.appendChild(div);
+    }
+
     document.getElementById('cotizacionForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const data = Object.fromEntries(new FormData(e.target));
-      const abono = parseFloat(data.abono || 0);
-      const valor = parseFloat(data.valor);
-      const total = valor - abono;
+
+      const formData = new FormData(e.target);
+      const fecha = new Date(formData.get("fecha"));
+      const dia = fecha.getDate();
+      const mes = fecha.getMonth() + 1;
+      const anio = fecha.getFullYear();
+      const consecutivo = formData.get("consecutivo");
+
+      const abono = parseFloat(formData.get("abono") || 0);
+      const nombreEmpresa = formData.get("nombreEmpresa");
+      const tipoId = formData.get("tipoId");
+      const identificacion = formData.get("identificacion");
+      const direccionEmpresa = formData.get("direccionEmpresa");
+      const telefonoEmpresa = formData.get("telefonoEmpresa");
+      const ciudadEmpresa = formData.get("ciudadEmpresa");
+
+      const productos = [];
+      const cantidadElems = document.querySelectorAll('input[name="cantidad"]');
+      const conceptoElems = document.querySelectorAll('input[name="concepto"]');
+      const valorElems = document.querySelectorAll('input[name="valor"]');
+
+      for (let i = 0; i < cantidadElems.length; i++) {
+        productos.push({
+          cantidad: parseInt(cantidadElems[i].value),
+          concepto: conceptoElems[i].value,
+          valor: parseFloat(valorElems[i].value),
+        });
+      }
+
+      const total = productos.reduce((sum, p) => sum + p.valor, 0) - abono;
 
       const response = await fetch("/.netlify/functions/get-pdf");
       const buffer = await response.arrayBuffer();
-      const existingPdfBytes = new Uint8Array(buffer); // 👈 más directo
+      const existingPdfBytes = new Uint8Array(buffer);
       const { PDFDocument, rgb } = PDFLib;
       const pdfDoc = await PDFDocument.load(existingPdfBytes);
       const page = pdfDoc.getPages()[0];
 
-      const drawText = (text, x, y, mark = false) => {
+      const drawText = (text, x, y) => {
         page.drawText(String(text), { x, y, size: 10, color: rgb(0, 0, 0) });
-        if (mark) {
-          page.drawRectangle({
-            x,
-            y,
-            width: 5,
-            height: 5,
-            color: rgb(1, 0, 0),
-          });
-        }
       };
 
+      // Fecha y consecutivo
+      drawText(dia, 120, 950);
+      drawText(mes, 165, 950);
+      drawText(anio, 198, 950);
+      drawText(consecutivo, 265, 950);
 
-      // Posiciones ajustadas manualmente sobre el templatev2.pdf
-      drawText(data.dia, 120, 950);  // true para mostrar marca
-      drawText(data.mes, 165, 950);
-      drawText(data.anio, 198, 950);
-      drawText(data.consecutivo, 265, 950);
+      // Info empresa
+      drawText(nombreEmpresa, 120, 750);
+      drawText(identificacion, 510, 750);
+      if (tipoId === 'cc') drawText('X', 390, 750);
+      if (tipoId === 'nit') drawText('X', 445, 750);
+      drawText(direccionEmpresa, 170, 713);
+      drawText(telefonoEmpresa, 380, 713);
+      drawText(ciudadEmpresa, 530, 713);
 
-      // Info Empresa Comprador
-      drawText(data.nombreEmpresa, 120, 750);
-      drawText(data.identificacion, 510, 750);
-      if (data.tipoId === 'cc') drawText('X', 390, 750);
-      if (data.tipoId === 'nit') drawText('X', 445, 750);
-      drawText(data.direccionEmpresa, 170, 713);
-      drawText(data.telefonoEmpresa, 380, 713);
-      drawText(data.ciudadEmpresa, 530, 713);
+      // Productos (espaciados verticalmente)
+      let yBase = 600;
+      productos.forEach((p, i) => {
+        drawText(p.cantidad, 140, yBase);
+        drawText(p.concepto, 250, yBase);
+        drawText(`$ ${p.valor.toLocaleString()}`, 655, yBase);
+        yBase -= 25;
+      });
 
-      // Cantidad - Concepto - Valor
-      drawText(data.cantidad, 140, 600);
-      drawText(data.concepto, 250, 600);
-      drawText(`$ ${valor.toLocaleString()}`, 655, 600);
       if (abono) drawText(`$ ${abono.toLocaleString()}`, 655, 400);
       drawText(`$ ${total.toLocaleString()}`, 655, 370);
 
