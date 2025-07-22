@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Generar Cotización PDF</title>
+  <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f4f4f4; }
+    input, select { margin: 6px 0; padding: 5px; width: 100%; }
+    button { padding: 10px 20px; background: #007bff; color: #fff; border: none; cursor: pointer; margin-top: 10px; }
+    button:hover { background: #0056b3; }
+    form { max-width: 400px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+  </style>
+</head>
+<body>
+  <form id="cotizacionForm">
+    <h2>Generar Cotización</h2>
+    <label>Día <input name="dia" type="number" required></label>
+    <label>Mes <input name="mes" type="number" required></label>
+    <label>Año <input name="anio" type="number" required></label>
+    <label>Consecutivo <input name="consecutivo" type="text" required></label>
+
+    <hr>
+    <h3>Empresa</h3>
+    <label>Nombre <input name="nombreEmpresa" required></label>
+    <label>
+      Tipo identificación
+      <select name="tipoId">
+        <option value="cc">C.C. No</option>
+        <option value="nit">NIT</option>
+      </select>
+    </label>
+    <label>No Identificación <input name="identificacion" required></label>
+    <label>Dirección <input name="direccionEmpresa" required></label>
+    <label>Teléfono <input name="telefonoEmpresa" required></label>
+    <label>Ciudad <input name="ciudadEmpresa" required></label>
+    <label>Cantidad <input name="cantidad" type="number" required></label>
+    <label>Concepto <input name="concepto" required></label>
+    <label>Valor <input name="valor" type="number" required></label>
+    <label>Abono (opcional) <input name="abono" type="number"></label>
+
+    <button type="submit">Descargar Cotización</button>
+  </form>
+
+  <script>
+    document.getElementById('cotizacionForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(e.target));
+      const abono = parseFloat(data.abono || 0);
+      const valor = parseFloat(data.valor);
+      const total = valor - abono;
+
+      const existingPdfBytes = await fetch("/.netlify/functions/get-pdf")
+  .then(res => res.arrayBuffer());
+      const { PDFDocument, rgb } = PDFLib;
+      const pdfDoc = await PDFDocument.load(existingPdfBytes);
+      const page = pdfDoc.getPages()[0];
+
+      const drawText = (text, x, y) => {
+        page.drawText(String(text), { x, y, size: 10, color: rgb(0, 0, 0) });
+      };
+
+      // Posiciones ajustadas manualmente sobre el templatev2.pdf
+      drawText(data.dia, 155, 713);
+      drawText(data.mes, 180, 713);
+      drawText(data.anio, 205, 713);
+      drawText(data.consecutivo, 440, 713);
+
+      // Info Empresa Comprador
+      drawText(data.nombreEmpresa, 60, 612);
+      drawText(data.identificacion, 240, 612);
+      if (data.tipoId === 'cc') drawText('X', 185, 613);
+      if (data.tipoId === 'nit') drawText('X', 210, 613);
+      drawText(data.direccionEmpresa, 60, 596);
+      drawText(data.telefonoEmpresa, 240, 596);
+      drawText(data.ciudadEmpresa, 380, 596);
+
+      // Cantidad - Concepto - Valor
+      drawText(data.cantidad, 60, 523);
+      drawText(data.concepto, 110, 523);
+      drawText(`$ ${valor.toLocaleString()}`, 400, 523);
+      if (abono) drawText(`$ ${abono.toLocaleString()}`, 400, 470);
+      drawText(`$ ${total.toLocaleString()}`, 400, 445);
+
+      const pdfBytes = await pdfDoc.save();
+      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'cotizacion.pdf';
+      link.click();
+    });
+  </script>
+</body>
+</html>
