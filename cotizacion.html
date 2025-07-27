@@ -283,6 +283,7 @@ button:hover {
           cantidad: parseInt(cantidadElems[i].value),
           concepto: conceptoElems[i].value,
           valor: parseFloat(valorElems[i].value),
+          subtotal: parseInt(cantidadElems[i].value) * parseFloat(valorElems[i].value),
         });
       }
 
