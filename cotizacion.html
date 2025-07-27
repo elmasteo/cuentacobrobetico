@@ -209,9 +209,6 @@ button:hover {
     <label>Nombre</label>
     <input name="nombreEmpresa" required>
 
-    <label>Dirección</label>
-    <input name="direccionEmpresa" required>
-
     <h3>Productos</h3>
     <div id="productos" class="productos-container">
       <div class="producto">
@@ -304,23 +301,23 @@ button:hover {
       };
 
       // Fecha y consecutivo
-      drawText(dia, 120, 950);
-      drawText(mes, 165, 950);
-      drawText(anio, 198, 950);
+      drawText(dia, 120, 660);
+      drawText(mes, 130, 670);
+      drawText(anio, 140, 680);
 
       // Info empresa
-      drawText(nombreEmpresa, 120, 750);
+      drawText(nombreEmpresa, 140, 600);
       // Productos (espaciados verticalmente)
-      let yBase = 630;
+      let yBase = 570;
       productos.forEach((p, i) => {
-        drawText(p.cantidad, 160, yBase);
-        drawText(p.concepto, 250, yBase);
-        drawText(`$ ${p.valor.toLocaleString()}`, 655, yBase);
+        drawText(p.cantidad, 130, yBase);
+        drawText(p.concepto, 200, yBase);
+        drawText(`$ ${p.valor.toLocaleString()}`, 300, yBase);
         yBase -= 25;
       });
 
-      drawText(`$ ${subtotal.toLocaleString()}`, 655, 420);
-      drawText(`$ ${total.toLocaleString()}`, 655, 370);
+      drawText(`$ ${subtotal.toLocaleString()}`, 140, 420);
+      drawText(`$ ${total.toLocaleString()}`, 160, 370);
 
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: 'application/pdf' });
