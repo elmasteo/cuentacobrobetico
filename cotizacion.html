@@ -307,15 +307,15 @@ button:hover {
       drawText(anio, 180, 660);
 
       // Info empresa
-      drawText(nombreEmpresa, 130, 600);
+      drawText(nombreEmpresa, 130, 590);
       // Productos (espaciados verticalmente)
-      let yBase = 470;
+      let yBase = 440;
       productos.forEach((p, i) => {
         drawText(p.cantidad, 120, yBase);
         drawText(p.concepto, 180, yBase);
-        drawText(`$ ${p.valor.toLocaleString()}`, 370, yBase);
-        drawText(`$ ${p.subtotal.toLocaleString()}`, 470, yBase);
-        yBase -= 30;
+        drawText(`$ ${p.valor.toLocaleString()}`, 400, yBase);
+        drawText(`$ ${p.subtotal.toLocaleString()}`, 480, yBase);
+        yBase -= 35;
       });
  
       drawText(`$ ${total.toLocaleString()}`, 480, 200);
