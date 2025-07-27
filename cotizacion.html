@@ -231,6 +231,16 @@ button:hover {
     <button type="submit">Descargar Cuenta de Cobro</button>
   </form>
 
+    <script>
+  const path = window.location.pathname.replace('/', '').replace('.html', '') || 'index';
+
+  document.querySelectorAll('ul li a').forEach(link => {
+    if (link.classList.contains(path)) {
+      link.classList.add('active');
+    }
+  });
+</script>
+
   <script>
     // Set default date
     const hoy = new Date();
