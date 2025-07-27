@@ -272,6 +272,13 @@ button:hover {
       const formData = new FormData(e.target);
       const [anio, mes, dia] = formData.get("fecha").split("-").map(Number);
 
+      const meses = [
+        "enero", "febrero", "marzo", "abril", "mayo", "junio",
+        "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+      ];
+
+      const nombreMes = meses[mes - 1];
+
       const nombreEmpresa = formData.get("nombreEmpresa");
       const productos = [];
       const cantidadElems = document.querySelectorAll('input[name="cantidad"]');
@@ -303,11 +310,11 @@ button:hover {
 
       // Fecha y consecutivo
       drawText(dia, 140, 660);
-      drawText(mes, 160, 660);
-      drawText(anio, 180, 660);
+      drawText(nombreMes, 160, 660);
+      drawText(anio, 190, 660);
 
       // Info empresa
-      drawText(nombreEmpresa, 130, 590);
+      drawText(nombreEmpresa, 130, 595);
       // Productos (espaciados verticalmente)
       let yBase = 440;
       productos.forEach((p, i) => {
