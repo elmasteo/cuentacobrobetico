@@ -190,7 +190,7 @@ button:hover {
   </style>
 </head>
 <body>
-  
+
   <div class="tab-wrapper">
     <ul>
       <li><a class="cuentaCobro" href="index.html">Cuenta de Cobro</a></li>
@@ -282,7 +282,7 @@ button:hover {
       const subtotal = productos.reduce((sum, p) => sum + (p.valor * p.cantidad), 0);
       const total = subtotal;
 
-      const response = await fetch("/.netlify/functions/get-pdf");
+      const response = await fetch("/.netlify/functions/get-cotizacion");
       const buffer = await response.arrayBuffer();
       const existingPdfBytes = new Uint8Array(buffer);
       const { PDFDocument, rgb } = PDFLib;
