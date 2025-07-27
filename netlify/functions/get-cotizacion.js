@@ -3,7 +3,7 @@ const path = require("path");
 
 exports.handler = async () => {
   try {
-    const filePath = path.resolve(__dirname, "cotizacion-template.pdf");
+    const filePath = path.resolve(__dirname, "cotizacion.pdf");
     const fileBuffer = fs.readFileSync(filePath);
 
     return {
