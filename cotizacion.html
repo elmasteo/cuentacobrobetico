@@ -301,23 +301,23 @@ button:hover {
       };
 
       // Fecha y consecutivo
-      drawText(dia, 120, 660);
-      drawText(mes, 130, 670);
-      drawText(anio, 140, 680);
+      drawText(dia, 140, 660);
+      drawText(mes, 160, 670);
+      drawText(anio, 180, 680);
 
       // Info empresa
-      drawText(nombreEmpresa, 140, 600);
+      drawText(nombreEmpresa, 130, 590);
       // Productos (espaciados verticalmente)
-      let yBase = 570;
+      let yBase = 500;
       productos.forEach((p, i) => {
-        drawText(p.cantidad, 130, yBase);
-        drawText(p.concepto, 200, yBase);
-        drawText(`$ ${p.valor.toLocaleString()}`, 300, yBase);
+        drawText(p.cantidad, 120, yBase);
+        drawText(p.concepto, 180, yBase);
+        drawText(`$ ${p.valor.toLocaleString()}`, 350, yBase);
+        drawText(`$ ${p.subtotal.toLocaleString()}`, 450, yBase);
         yBase -= 25;
       });
-
-      drawText(`$ ${subtotal.toLocaleString()}`, 140, 420);
-      drawText(`$ ${total.toLocaleString()}`, 160, 370);
+ 
+      drawText(`$ ${total.toLocaleString()}`, 500, 200);
 
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: 'application/pdf' });
