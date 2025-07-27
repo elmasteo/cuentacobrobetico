@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Generar Cuenta de cobro PDF</title>
+  <title>Generar Cotización PDF</title>
   <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
@@ -190,7 +190,7 @@ button:hover {
   </style>
 </head>
 <body>
-
+  
   <div class="tab-wrapper">
     <ul>
       <li><a class="cuentaCobro" href="index.html">Cuenta de Cobro</a></li>
@@ -199,36 +199,18 @@ button:hover {
   </div>
 
   <form id="cotizacionForm">
-    <h2>Generar Cuenta de Cobro</h2>
+    <h2>Generar Cotización</h2>
 
     <label>Fecha</label>
     <input name="fecha" type="date" required>
-
-    <label>Consecutivo</label>
-    <input name="consecutivo" type="text" placeholder="31" required>
 
     <hr>
     <h3>Empresa</h3>
     <label>Nombre</label>
     <input name="nombreEmpresa" required>
 
-    <label>Tipo identificación</label>
-    <select name="tipoId">
-      <option value="cc">C.C. No</option>
-      <option value="nit">NIT</option>
-    </select>
-
-    <label>No Identificación</label>
-    <input name="identificacion" type="number">
-
     <label>Dirección</label>
     <input name="direccionEmpresa" required>
-
-    <label>Teléfono</label>
-    <input name="telefonoEmpresa" type="number">
-
-    <label>Ciudad</label>
-    <input name="ciudadEmpresa" value="Bogotá" required>
 
     <h3>Productos</h3>
     <div id="productos" class="productos-container">
@@ -245,9 +227,6 @@ button:hover {
     </div>
 
     <button type="button" class="add-producto" onclick="agregarProducto()">Agregar otro producto</button>
-
-    <label>Abono (opcional)</label>
-    <input name="abono" type="number">
 
     <button type="submit">Descargar Cuenta de Cobro</button>
   </form>
@@ -285,16 +264,8 @@ button:hover {
 
       const formData = new FormData(e.target);
       const [anio, mes, dia] = formData.get("fecha").split("-").map(Number);
-      const consecutivo = formData.get("consecutivo");
 
-      const abono = parseFloat(formData.get("abono") || 0);
       const nombreEmpresa = formData.get("nombreEmpresa");
-      const tipoId = formData.get("tipoId");
-      const identificacion = formData.get("identificacion");
-      const direccionEmpresa = formData.get("direccionEmpresa");
-      const telefonoEmpresa = formData.get("telefonoEmpresa");
-      const ciudadEmpresa = formData.get("ciudadEmpresa");
-
       const productos = [];
       const cantidadElems = document.querySelectorAll('input[name="cantidad"]');
       const conceptoElems = document.querySelectorAll('input[name="concepto"]');
@@ -309,7 +280,7 @@ button:hover {
       }
 
       const subtotal = productos.reduce((sum, p) => sum + (p.valor * p.cantidad), 0);
-      const total = subtotal - abono;
+      const total = subtotal;
 
       const response = await fetch("/.netlify/functions/get-pdf");
       const buffer = await response.arrayBuffer();
@@ -326,17 +297,9 @@ button:hover {
       drawText(dia, 120, 950);
       drawText(mes, 165, 950);
       drawText(anio, 198, 950);
-      drawText(consecutivo, 265, 950);
 
       // Info empresa
       drawText(nombreEmpresa, 120, 750);
-      drawText(identificacion, 510, 750);
-      if (tipoId === 'cc') drawText('X', 390, 750);
-      if (tipoId === 'nit') drawText('X', 445, 750);
-      drawText(direccionEmpresa, 170, 713);
-      drawText(telefonoEmpresa, 360, 713);
-      drawText(ciudadEmpresa, 530, 713);
-
       // Productos (espaciados verticalmente)
       let yBase = 630;
       productos.forEach((p, i) => {
@@ -346,7 +309,6 @@ button:hover {
         yBase -= 25;
       });
 
-      if (abono) drawText(`$ ${abono.toLocaleString()}`, 655, 390);
       drawText(`$ ${subtotal.toLocaleString()}`, 655, 420);
       drawText(`$ ${total.toLocaleString()}`, 655, 370);
 
@@ -356,7 +318,7 @@ button:hover {
       link.href = URL.createObjectURL(blob);
       const fechaStr = `${String(dia).padStart(2, '0')}${String(mes).padStart(2, '0')}${anio}`;
       const nombreLimpio = nombreEmpresa.trim().replace(/\s+/g, '_').replace(/[^\w\d_-]/g, '');
-      const nombreArchivo = `CuentaDeCobro-${fechaStr}-${nombreLimpio}.pdf`;
+      const nombreArchivo = `Cotizacion-${fechaStr}-${nombreLimpio}.pdf`;
 
       link.download = nombreArchivo;
 
