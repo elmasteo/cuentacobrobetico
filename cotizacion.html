@@ -348,19 +348,9 @@ button:hover {
 
         drawText(`$ ${p.valor.toLocaleString()}`, 400, yBase);
         drawText(`$ ${p.subtotal.toLocaleString()}`, 480, yBase);
-        yBase -= 45;
+        yBase -= 42;
       });
 
-
-      /*
-      productos.forEach((p, i) => {
-        drawText(p.cantidad, 100, yBase);
-        drawText(p.concepto, 165, yBase);
-        drawText(`$ ${p.valor.toLocaleString()}`, 400, yBase);
-        drawText(`$ ${p.subtotal.toLocaleString()}`, 480, yBase);
-        yBase -= 40;
-      });
- */
       drawText(`$ ${total.toLocaleString()}`, 480, 200);
 
       const fileInput = document.getElementById("imagen");
@@ -381,11 +371,11 @@ button:hover {
         imgEmbed = await pdfDoc.embedJpg(imgBytes);
       }
 
-      const dims = imgEmbed.scale(200 / imgEmbed.width); // escalar a ancho 200 px
+      const dims = imgEmbed.scale(150 / imgEmbed.width); // escalar a ancho 200 px
 
       secondPage.drawImage(imgEmbed, {
         x: 100,
-        y: 300, // posición desde la parte inferior de la página (ajústala según lo que necesites)
+        y: 310, // posición desde la parte inferior de la página (ajústala según lo que necesites)
         width: dims.width,
         height: dims.height,
       });
