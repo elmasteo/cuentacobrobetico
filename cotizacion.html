@@ -319,8 +319,8 @@ button:hover {
       // Info empresa
       drawText(nombreEmpresa, 130, 595);
       // Productos (espaciados verticalmente)
-      let yBase = 440;
-      const maxWidth = 170; // ancho máximo aproximado en caracteres (ajustable si usas otra fuente)
+      let yBase = 460;
+      const maxWidth = 200; // ancho máximo aproximado en caracteres (ajustable si usas otra fuente)
 
       productos.forEach((p, i) => {
         drawText(p.cantidad, 100, yBase);
@@ -348,7 +348,7 @@ button:hover {
 
         drawText(`$ ${p.valor.toLocaleString()}`, 400, yBase);
         drawText(`$ ${p.subtotal.toLocaleString()}`, 480, yBase);
-        yBase -= 40;
+        yBase -= 45;
       });
 
 
@@ -379,7 +379,7 @@ button:hover {
 
         page.drawImage(imgEmbed, {
           x: 100,
-          y: 10,
+          y: -100,
           width: dims.width,
           height: dims.height,
         });
