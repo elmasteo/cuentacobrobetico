@@ -225,6 +225,9 @@ button:hover {
 
     <button type="button" class="add-producto" onclick="agregarProducto()">Agregar otro producto</button>
 
+    <label>Imagen opcional (logo o referencia)</label>
+    <input type="file" id="imagen" accept="image/*">
+
     <button type="submit">Descargar Cotización</button>
   </form>
 
@@ -316,17 +319,72 @@ button:hover {
       // Info empresa
       drawText(nombreEmpresa, 130, 595);
       // Productos (espaciados verticalmente)
-      let yBase = 440;
+      let yBase = 420;
+      const maxWidth = 170; // ancho máximo aproximado en caracteres (ajustable si usas otra fuente)
+
+      productos.forEach((p, i) => {
+        drawText(p.cantidad, 100, yBase);
+        
+        const concepto = p.concepto;
+        const palabras = concepto.split(" ");
+        let lineaActual = "";
+        let yConcepto = yBase;
+
+        palabras.forEach((palabra, idx) => {
+          const tempLinea = lineaActual + palabra + " ";
+          if (tempLinea.length * 5 > maxWidth) { // ajuste según tamaño de fuente
+            drawText(lineaActual.trim(), 165, yConcepto);
+            lineaActual = palabra + " ";
+            yConcepto -= 12;
+          } else {
+            lineaActual = tempLinea;
+          }
+        });
+
+        // Última línea
+        if (lineaActual.trim()) {
+          drawText(lineaActual.trim(), 165, yConcepto);
+        }
+
+        drawText(`$ ${p.valor.toLocaleString()}`, 400, yBase);
+        drawText(`$ ${p.subtotal.toLocaleString()}`, 480, yBase);
+        yBase -= 40;
+      });
+
+
+      /*
       productos.forEach((p, i) => {
         drawText(p.cantidad, 100, yBase);
         drawText(p.concepto, 165, yBase);
         drawText(`$ ${p.valor.toLocaleString()}`, 400, yBase);
         drawText(`$ ${p.subtotal.toLocaleString()}`, 480, yBase);
-        yBase -= 45;
+        yBase -= 40;
       });
- 
+ */
       drawText(`$ ${total.toLocaleString()}`, 480, 200);
 
+      const fileInput = document.getElementById("imagen");
+      if (fileInput.files.length > 0) {
+        const imgFile = fileInput.files[0];
+        const imgBytes = await imgFile.arrayBuffer();
+
+        let imgEmbed, dims;
+        if (imgFile.type.includes("png")) {
+          imgEmbed = await pdfDoc.embedPng(imgBytes);
+        } else {
+          imgEmbed = await pdfDoc.embedJpg(imgBytes);
+        }
+
+        dims = imgEmbed.scale(200 / imgEmbed.width); // escala a ancho 200px
+
+        page.drawImage(imgEmbed, {
+          x: 100,
+          y: 200,
+          width: dims.width,
+          height: dims.height,
+        });
+      }
+      
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: 'application/pdf' });
       const link = document.createElement('a');
