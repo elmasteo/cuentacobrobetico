@@ -320,7 +320,7 @@ button:hover {
       drawText(nombreEmpresa, 130, 595);
       // Productos (espaciados verticalmente)
       let yBase = 460;
-      const maxWidth = 230; // ancho máximo aproximado en caracteres (ajustable si usas otra fuente)
+      const maxWidth = 240; // ancho máximo aproximado en caracteres (ajustable si usas otra fuente)
 
       productos.forEach((p, i) => {
         drawText(p.cantidad, 100, yBase);
@@ -385,7 +385,7 @@ button:hover {
 
       secondPage.drawImage(imgEmbed, {
         x: 100,
-        y: 400, // posición desde la parte inferior de la página (ajústala según lo que necesites)
+        y: 300, // posición desde la parte inferior de la página (ajústala según lo que necesites)
         width: dims.width,
         height: dims.height,
       });
