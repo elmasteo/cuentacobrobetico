@@ -314,8 +314,13 @@ button:hover {
       // Fecha y consecutivo
       drawText(dia, 140, 660);
       drawText(nombreMes, 155, 660);
-      drawText(anio, 195, 660);
 
+      if (meses[8,9,10,11]) {
+        drawText(anio, 210, 660);
+      }else{
+        drawText(anio, 195, 660);
+      }
+      
       // Info empresa
       drawText(nombreEmpresa, 130, 595);
       // Productos (espaciados verticalmente)
