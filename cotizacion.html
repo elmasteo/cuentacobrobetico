@@ -225,7 +225,7 @@ button:hover {
 
     <button type="button" class="add-producto" onclick="agregarProducto()">Agregar otro producto</button>
 
-    <button type="submit">Descargar Cuenta de Cobro</button>
+    <button type="submit">Descargar Cotización</button>
   </form>
 
     <script>
@@ -318,8 +318,8 @@ button:hover {
       // Productos (espaciados verticalmente)
       let yBase = 440;
       productos.forEach((p, i) => {
-        drawText(p.cantidad, 120, yBase);
-        drawText(p.concepto, 180, yBase);
+        drawText(p.cantidad, 100, yBase);
+        drawText(p.concepto, 165, yBase);
         drawText(`$ ${p.valor.toLocaleString()}`, 400, yBase);
         drawText(`$ ${p.subtotal.toLocaleString()}`, 480, yBase);
         yBase -= 35;
