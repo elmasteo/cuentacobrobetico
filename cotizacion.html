@@ -319,7 +319,7 @@ button:hover {
       // Info empresa
       drawText(nombreEmpresa, 130, 595);
       // Productos (espaciados verticalmente)
-      let yBase = 420;
+      let yBase = 440;
       const maxWidth = 170; // ancho máximo aproximado en caracteres (ajustable si usas otra fuente)
 
       productos.forEach((p, i) => {
@@ -379,12 +379,12 @@ button:hover {
 
         page.drawImage(imgEmbed, {
           x: 100,
-          y: 200,
+          y: 10,
           width: dims.width,
           height: dims.height,
         });
       }
-      
+
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: 'application/pdf' });
       const link = document.createElement('a');
