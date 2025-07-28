@@ -315,12 +315,12 @@ button:hover {
       drawText(dia, 140, 660);
       drawText(nombreMes, 155, 660);
 
-      if (meses[8,9,10,11]) {
-        drawText(anio, 230, 660);
-      }else{
+     if ([9, 10, 11, 12].includes(mes)) {
+        drawText(anio, 230, 660); // Meses con nombres largos: septiembre, octubre, etc.
+      } else {
         drawText(anio, 195, 660);
       }
-      
+
       // Info empresa
       drawText(nombreEmpresa, 130, 595);
       // Productos (espaciados verticalmente)
