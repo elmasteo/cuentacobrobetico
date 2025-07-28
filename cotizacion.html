@@ -320,7 +320,7 @@ button:hover {
       drawText(nombreEmpresa, 130, 595);
       // Productos (espaciados verticalmente)
       let yBase = 460;
-      const maxWidth = 200; // ancho máximo aproximado en caracteres (ajustable si usas otra fuente)
+      const maxWidth = 220; // ancho máximo aproximado en caracteres (ajustable si usas otra fuente)
 
       productos.forEach((p, i) => {
         drawText(p.cantidad, 100, yBase);
@@ -368,22 +368,31 @@ button:hover {
         const imgFile = fileInput.files[0];
         const imgBytes = await imgFile.arrayBuffer();
 
-        let imgEmbed, dims;
-        if (imgFile.type.includes("png")) {
-          imgEmbed = await pdfDoc.embedPng(imgBytes);
-        } else {
-          imgEmbed = await pdfDoc.embedJpg(imgBytes);
-        }
-
-        dims = imgEmbed.scale(200 / imgEmbed.width); // escala a ancho 200px
-
-        page.drawImage(imgEmbed, {
-          x: 100,
-          y: -100,
-          width: dims.width,
-          height: dims.height,
-        });
+      let secondPage;
+      if (pdfDoc.getPageCount() >= 2) {
+        secondPage = pdfDoc.getPages()[1];
+      } else {
+        secondPage = pdfDoc.addPage(); // crea una nueva si no existe
       }
+
+      const imgFile = fileInput.files[0];
+      const imgBytes = await imgFile.arrayBuffer();
+
+      let imgEmbed;
+      if (imgFile.type.includes("png")) {
+        imgEmbed = await pdfDoc.embedPng(imgBytes);
+      } else {
+        imgEmbed = await pdfDoc.embedJpg(imgBytes);
+      }
+
+      const dims = imgEmbed.scale(200 / imgEmbed.width); // escalar a ancho 200 px
+
+      secondPage.drawImage(imgEmbed, {
+        x: 100,
+        y: 600, // posición desde la parte inferior de la página (ajústala según lo que necesites)
+        width: dims.width,
+        height: dims.height,
+      });
 
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: 'application/pdf' });
