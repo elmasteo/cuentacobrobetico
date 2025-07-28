@@ -364,10 +364,6 @@ button:hover {
       drawText(`$ ${total.toLocaleString()}`, 480, 200);
 
       const fileInput = document.getElementById("imagen");
-      if (fileInput.files.length > 0) {
-        const imgFile = fileInput.files[0];
-        const imgBytes = await imgFile.arrayBuffer();
-
       let secondPage;
       if (pdfDoc.getPageCount() >= 2) {
         secondPage = pdfDoc.getPages()[1];
