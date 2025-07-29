@@ -193,8 +193,8 @@ button:hover {
 
   <div class="tab-wrapper">
     <ul>
-      <li><a class="cuentaCobro" href="index.html">Cuenta de Cobro</a></li>
-      <li><a class="cotizacion" href="cotizacion.html">Cotizaciones</a></li>
+      <li><a class="cuentaCobro" href="index.html" data-tab="index">Cuenta de Cobro</a></li>
+      <li><a class="cotizacion" href="cotizacion.html" data-tab="cotizacion">Cotizaciones</a></li>
     </ul>
   </div>
 
@@ -231,15 +231,19 @@ button:hover {
     <button type="submit">Descargar Cotización</button>
   </form>
 
-    <script>
-  const path = window.location.pathname.replace('/', '').replace('.html', '') || 'index';
+<script>
+  const pathname = window.location.pathname;
+  let path = pathname.substring(pathname.lastIndexOf('/') + 1).replace('.html', '');
+
+  if (path === '') path = 'index';
 
   document.querySelectorAll('ul li a').forEach(link => {
-    if (link.classList.contains(path)) {
+    if (link.dataset.tab === path) {
       link.classList.add('active');
     }
   });
 </script>
+
 
   <script>
     // Set default date
