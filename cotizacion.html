@@ -225,8 +225,8 @@ button:hover {
 
     <button type="button" class="add-producto" onclick="agregarProducto()">Agregar otro producto</button>
 
-    <label>Imagen opcional (logo o referencia)</label>
-    <input type="file" id="imagen" accept="image/*">
+    <label>Imagenes opcional (logos o referencias)</label>
+    <input type="file" id="imagen" accept="image/*" multiple>
 
     <button type="submit">Descargar Cotización</button>
   </form>
@@ -359,6 +359,47 @@ button:hover {
       drawText(`$ ${total.toLocaleString()}`, 480, 200);
 
       const fileInput = document.getElementById("imagen");
+      const imgFiles = Array.from(fileInput.files).slice(0, 4); // Máximo 4 imágenes
+
+      if (imgFiles.length > 0) {
+        let secondPage;
+        if (pdfDoc.getPageCount() >= 2) {
+          secondPage = pdfDoc.getPages()[1];
+        } else {
+          secondPage = pdfDoc.addPage();
+        }
+
+        const positions = [
+          { x: 60, y: 500 },
+          { x: 320, y: 500 },
+          { x: 60, y: 250 },
+          { x: 320, y: 250 }
+        ];
+
+        for (let i = 0; i < imgFiles.length; i++) {
+          const imgBytes = await imgFiles[i].arrayBuffer();
+
+          let imgEmbed;
+          if (imgFiles[i].type.includes("png")) {
+            imgEmbed = await pdfDoc.embedPng(imgBytes);
+          } else {
+            imgEmbed = await pdfDoc.embedJpg(imgBytes);
+          }
+
+          const dims = imgEmbed.scale(150 / imgEmbed.width); // ancho 150px
+
+          secondPage.drawImage(imgEmbed, {
+            x: positions[i].x,
+            y: positions[i].y,
+            width: dims.width,
+            height: dims.height
+          });
+        }
+      }
+
+
+/*
+      const fileInput = document.getElementById("imagen");
       const imgFile = fileInput.files[0];
 
       if (imgFile) {
@@ -387,7 +428,7 @@ button:hover {
           height: dims.height,
         });
       }
-
+*/
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: 'application/pdf' });
       const link = document.createElement('a');
