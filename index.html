@@ -352,13 +352,43 @@ button:hover {
       drawText(ciudadEmpresa, 530, 713);
 
       // Productos (espaciados verticalmente)
+      /*
       let yBase = 630;
       productos.forEach((p, i) => {
         drawText(p.cantidad, 160, yBase);
         drawText(p.concepto, 250, yBase);
         drawText(`$ ${p.valor.toLocaleString()}`, 655, yBase);
         yBase -= 25;
-      });
+      });*/
+
+      // Productos con salto de línea en concepto
+        let yBase = 630;
+
+        productos.forEach((p) => {
+
+          // Cantidad (siempre una sola línea)
+          drawText(p.cantidad, 160, yBase);
+
+          // Wrap del concepto
+          const maxChars = 45; // ajusta si lo necesitas
+          const concepto = p.concepto;
+          const lineas = [];
+
+          for (let i = 0; i < concepto.length; i += maxChars) {
+            lineas.push(concepto.slice(i, i + maxChars));
+          }
+
+          lineas.forEach((linea, idx) => {
+            const y = yBase - (idx * 12); // espacio entre líneas
+            drawText(linea, 250, y);
+          });
+
+          // Valor (solo en primera línea)
+          drawText(`$ ${p.valor.toLocaleString()}`, 655, yBase);
+
+          // Ajuste total consumido
+          yBase -= (lineas.length * 12) + 13;
+        });
 
       if (abono) drawText(`$ ${abono.toLocaleString()}`, 655, 390);
       drawText(`$ ${subtotal.toLocaleString()}`, 655, 420);
