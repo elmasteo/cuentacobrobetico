@@ -22,25 +22,17 @@ form {
   margin: auto;
 }
 
-h2, h3 {
-  margin-top: 0;
-  color: #333;
-}
-
 label {
   display: block;
   margin: 16px 0 6px;
   font-weight: 600;
-  color: #444;
 }
 
 input, select {
   width: 90%;
-  padding: 12px 14px;
+  padding: 12px;
   border-radius: 12px;
   border: 1px solid #ccc;
-  font-size: 16px;
-  background-color: #fff;
 }
 
 .productos-container {
@@ -58,23 +50,15 @@ input, select {
 button {
   width: 100%;
   padding: 14px;
-  font-size: 16px;
-  margin-top: 24px;
+  margin-top: 20px;
   border: none;
   border-radius: 12px;
   background: #007bff;
-  color: white;
-  cursor: pointer;
+  color: #fff;
 }
 
-.add-producto {
-  background: #28a745;
-}
-
-.remove-producto {
-  background: #dc3545;
-  margin-top: 10px;
-}
+.add-producto { background:#28a745; }
+.remove-producto { background:#dc3545; }
   </style>
 </head>
 <body>
@@ -164,12 +148,14 @@ document.getElementById('cotizacionForm').addEventListener('submit', async (e) =
   e.preventDefault();
 
   const form = new FormData(e.target);
-  const [y,m,d] = form.get('fecha').split('-');
+  const [anio, mes, dia] = form.get('fecha').split('-');
+
+  const nombreEmpresa = form.get('nombreEmpresa');
 
   const productos = [...document.querySelectorAll('.producto')].map(p => ({
-    cantidad: p.querySelector('[name="cantidad"]').value,
+    cantidad: Number(p.querySelector('[name="cantidad"]').value),
     concepto: p.querySelector('[name="concepto"]').value,
-    valor: p.querySelector('[name="valor"]').value
+    valor: Number(p.querySelector('[name="valor"]').value)
   }));
 
   const response = await fetch('/.netlify/functions/get-pdf');
@@ -180,35 +166,31 @@ document.getElementById('cotizacionForm').addEventListener('submit', async (e) =
   const font = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
   const { rgb } = PDFLib;
 
-  const drawText = (text, x, y) => {
-    page.drawText(String(text), { x, y, size: 10, font, color: rgb(0,0,0) });
-  };
+  const drawText = (t,x,y)=>page.drawText(String(t),{x,y,size:10,font,color:rgb(0,0,0)});
 
-  function wrapText(text, maxWidth) {
-    const words = text.split(' ');
-    const lines = [];
-    let line = '';
-
-    words.forEach(word => {
-      const test = line ? line + ' ' + word : word;
-      if (font.widthOfTextAtSize(test, 10) <= maxWidth) {
-        line = test;
-      } else {
-        lines.push(line);
-        line = word;
+  function wrapText(text,maxWidth){
+    const words=text.split(' ');
+    const lines=[];
+    let line='';
+    for(const w of words){
+      const test=line?line+' '+w:w;
+      if(font.widthOfTextAtSize(test,10)<=maxWidth){
+        line=test;
+      }else{
+        if(line) lines.push(line);
+        line=w;
       }
-    });
-
-    if (line) lines.push(line);
+    }
+    if(line) lines.push(line);
     return lines;
   }
 
-  drawText(d,120,950);
-  drawText(m,165,950);
-  drawText(y,198,950);
+  drawText(dia,120,950);
+  drawText(mes,165,950);
+  drawText(anio,198,950);
   drawText(form.get('consecutivo'),265,950);
 
-  drawText(form.get('nombreEmpresa'),120,750);
+  drawText(nombreEmpresa,120,750);
   drawText(form.get('identificacion'),510,750);
   if(form.get('tipoId')==='cc') drawText('X',390,750);
   if(form.get('tipoId')==='nit') drawText('X',445,750);
@@ -216,19 +198,16 @@ document.getElementById('cotizacionForm').addEventListener('submit', async (e) =
   drawText(form.get('telefonoEmpresa'),360,713);
   drawText(form.get('ciudadEmpresa'),530,713);
 
-  let yBase = 630;
-
-  productos.forEach(p => {
+  let yBase=630;
+  productos.forEach(p=>{
     drawText(p.cantidad,160,yBase);
-
-    const lines = wrapText(p.concepto.toUpperCase(),370);
+    const lines=wrapText(p.concepto.toUpperCase(),370);
     lines.forEach((l,i)=>drawText(l,250,yBase-(i*12)));
-
-    drawText(`$ ${Number(p.valor).toLocaleString()}`,655,yBase);
-    yBase -= (lines.length * 12) + 13;
+    drawText(`$ ${p.valor.toLocaleString()}`,655,yBase);
+    yBase-=(lines.length*12)+13;
   });
 
-  const subtotal = productos.reduce((s,p)=>s+(p.valor*p.cantidad),0);
+  const subtotal = productos.reduce((s,p)=>s+p.valor*p.cantidad,0);
   const abono = Number(form.get('abono')||0);
   const total = subtotal - abono;
 
@@ -238,10 +217,14 @@ document.getElementById('cotizacionForm').addEventListener('submit', async (e) =
 
   const finalPdf = await pdfDoc.save();
   const blob = new Blob([finalPdf], { type: 'application/pdf' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'CuentaDeCobro.pdf';
-  a.click();
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+
+  const fechaStr = `${String(dia).padStart(2,'0')}${String(mes).padStart(2,'0')}${anio}`;
+  const nombreLimpio = nombreEmpresa.trim().replace(/\s+/g,'_').replace(/[^\w\d_-]/g,'');
+  link.download = `CuentaDeCobro-${fechaStr}-${nombreLimpio}.pdf`;
+
+  link.click();
 });
 </script>
 
