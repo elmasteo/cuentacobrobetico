@@ -40,22 +40,19 @@ input, select {
   border-radius: 12px;
   border: 1px solid #ccc;
   font-size: 16px;
-  transition: border 0.2s ease, box-shadow 0.2s ease;
   background-color: #fff;
 }
 
-input:focus, select:focus {
-  border-color: #007bff;
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
-  outline: none;
+.productos-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.productos-container > div {
+.producto {
   border: 1px solid #ddd;
   padding: 14px;
-  margin-top: 12px;
   border-radius: 12px;
-  background: #fefefe;
 }
 
 button {
@@ -68,344 +65,185 @@ button {
   background: #007bff;
   color: white;
   cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-button:hover {
-  background: #0056b3;
 }
 
 .add-producto {
   background: #28a745;
-  margin-top: 10px;
-}
-
-.add-producto:hover {
-  background: #218838;
-}
-
-@media (max-width: 480px) {
-  form {
-    padding: 20px;
-    border-radius: 12px;
-  }
-
-  input, select, button {
-    font-size: 16px;
-  }
-
-  label {
-    margin-top: 12px;
-  }
-}
-.productos-container {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  overflow-x: hidden;
-}
-
-.productos-container > div {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.productos-container input,
-.productos-container select {
-  max-width: 100%;
-  box-sizing: border-box;
-}
-.producto {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.producto label {
-  flex: 1 1 100%;
-}
-
-.producto input {
-  flex: 1 1 calc(33.333% - 8px);
-  min-width: 0;
-  box-sizing: border-box;
 }
 
 .remove-producto {
   background: #dc3545;
-  color: #fff;
-  border: none;
-  padding: 10px;
-  border-radius: 12px;
-  cursor: pointer;
-  margin-top: 8px;
-  transition: background 0.3s ease;
-  width: 100%;
+  margin-top: 10px;
 }
-
-.remove-producto:hover {
-  background: #c82333;
-}
-
-.tab-wrapper {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-    }
-
-    ul {
-      list-style: none;
-      padding: 0;
-      margin: 0 0 20px 0;
-      display: flex;
-      gap: 12px;
-      border-bottom: 2px solid #dee2e6;
-      max-width: 960px;
-      width: 100%;
-    }
-
-    ul li a {
-      display: inline-block;
-      padding: 10px 18px;
-      border-radius: 8px 8px 0 0;
-      text-decoration: none;
-      color: #495057;
-      background: #f1f3f5;
-      font-weight: 600;
-      transition: all 0.2s ease;
-    }
-
-    ul li a:hover {
-      background: #e9ecef;
-      color: #212529;
-    }
-
-    ul li a.active {
-      background: #081f2c;
-      color: #fff;
-    }
-
-
   </style>
 </head>
 <body>
 
-  <div class="tab-wrapper">
-    <ul>
-      <li><a class="cuentaCobro" href="index.html" data-tab="index">Cuenta de Cobro</a></li>
-      <li><a class="cotizacion" href="cotizacion.html" data-tab="cotizacion">Cotizaciones</a></li>
-    </ul>
-  </div>
+<form id="cotizacionForm">
+  <h2>Generar Cuenta de Cobro</h2>
 
-  <form id="cotizacionForm">
-    <h2>Generar Cuenta de Cobro</h2>
+  <label>Fecha</label>
+  <input name="fecha" type="date" required>
 
-    <label>Fecha</label>
-    <input name="fecha" type="date" required>
+  <label>Consecutivo</label>
+  <input name="consecutivo" required>
 
-    <label>Consecutivo</label>
-    <input name="consecutivo" type="text" placeholder="31" required>
+  <h3>Empresa</h3>
 
-    <hr>
-    <h3>Empresa</h3>
-    <label>Nombre</label>
-    <input name="nombreEmpresa" required>
+  <label>Nombre</label>
+  <input name="nombreEmpresa" required>
 
-    <label>Tipo identificación</label>
-    <select name="tipoId">
-      <option value="cc">C.C. No</option>
-      <option value="nit">NIT</option>
-    </select>
+  <label>Tipo identificación</label>
+  <select name="tipoId">
+    <option value="cc">C.C. No</option>
+    <option value="nit">NIT</option>
+  </select>
 
-    <label>No Identificación</label>
-    <input name="identificacion" type="number">
+  <label>No Identificación</label>
+  <input name="identificacion">
 
-    <label>Dirección</label>
-    <input name="direccionEmpresa" required>
+  <label>Dirección</label>
+  <input name="direccionEmpresa" required>
 
-    <label>Teléfono</label>
-    <input name="telefonoEmpresa" type="number">
+  <label>Teléfono</label>
+  <input name="telefonoEmpresa">
 
-    <label>Ciudad</label>
-    <input name="ciudadEmpresa" value="Bogotá" required>
+  <label>Ciudad</label>
+  <input name="ciudadEmpresa" value="Bogotá">
 
-    <h3>Productos</h3>
-    <div id="productos" class="productos-container">
-      <div class="producto">
+  <h3>Productos</h3>
+
+  <div id="productos" class="productos-container">
+    <div class="producto">
       <label>Cantidad</label>
       <input name="cantidad" type="number" required>
+
       <label>Concepto</label>
       <input name="concepto" required>
+
       <label>Valor</label>
       <input name="valor" type="number" required>
+
       <button type="button" class="remove-producto" onclick="eliminarProducto(this)">Eliminar</button>
     </div>
+  </div>
 
-    </div>
+  <button type="button" class="add-producto" onclick="agregarProducto()">Agregar otro producto</button>
 
-    <button type="button" class="add-producto" onclick="agregarProducto()">Agregar otro producto</button>
+  <label>Abono (opcional)</label>
+  <input name="abono" type="number">
 
-    <label>Abono (opcional)</label>
-    <input name="abono" type="number">
-
-    <button type="submit">Descargar Cuenta de Cobro</button>
-  </form>
+  <button type="submit">Descargar Cuenta de Cobro</button>
+</form>
 
 <script>
-  const pathname = window.location.pathname;
-  let path = pathname.substring(pathname.lastIndexOf('/') + 1).replace('.html', '');
+const hoy = new Date();
+hoy.setMinutes(hoy.getMinutes() - hoy.getTimezoneOffset());
+document.querySelector('[name="fecha"]').value = hoy.toISOString().slice(0,10);
 
-  if (path === '') path = 'index';
+function agregarProducto() {
+  const div = document.createElement('div');
+  div.className = 'producto';
+  div.innerHTML = `
+    <label>Cantidad</label>
+    <input name="cantidad" type="number" required>
+    <label>Concepto</label>
+    <input name="concepto" required>
+    <label>Valor</label>
+    <input name="valor" type="number" required>
+    <button type="button" class="remove-producto" onclick="eliminarProducto(this)">Eliminar</button>
+  `;
+  document.getElementById('productos').appendChild(div);
+}
 
-  document.querySelectorAll('ul li a').forEach(link => {
-    if (link.dataset.tab === path) {
-      link.classList.add('active');
-    }
+function eliminarProducto(btn) {
+  btn.closest('.producto').remove();
+}
+
+document.getElementById('cotizacionForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const form = new FormData(e.target);
+  const [y,m,d] = form.get('fecha').split('-');
+
+  const productos = [...document.querySelectorAll('.producto')].map(p => ({
+    cantidad: p.querySelector('[name="cantidad"]').value,
+    concepto: p.querySelector('[name="concepto"]').value,
+    valor: p.querySelector('[name="valor"]').value
+  }));
+
+  const response = await fetch('/.netlify/functions/get-pdf');
+  const pdfBytes = await response.arrayBuffer();
+
+  const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
+  const page = pdfDoc.getPages()[0];
+  const font = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+  const { rgb } = PDFLib;
+
+  const drawText = (text, x, y) => {
+    page.drawText(String(text), { x, y, size: 10, font, color: rgb(0,0,0) });
+  };
+
+  function wrapText(text, maxWidth) {
+    const words = text.split(' ');
+    const lines = [];
+    let line = '';
+
+    words.forEach(word => {
+      const test = line ? line + ' ' + word : word;
+      if (font.widthOfTextAtSize(test, 10) <= maxWidth) {
+        line = test;
+      } else {
+        lines.push(line);
+        line = word;
+      }
+    });
+
+    if (line) lines.push(line);
+    return lines;
+  }
+
+  drawText(d,120,950);
+  drawText(m,165,950);
+  drawText(y,198,950);
+  drawText(form.get('consecutivo'),265,950);
+
+  drawText(form.get('nombreEmpresa'),120,750);
+  drawText(form.get('identificacion'),510,750);
+  if(form.get('tipoId')==='cc') drawText('X',390,750);
+  if(form.get('tipoId')==='nit') drawText('X',445,750);
+  drawText(form.get('direccionEmpresa'),170,713);
+  drawText(form.get('telefonoEmpresa'),360,713);
+  drawText(form.get('ciudadEmpresa'),530,713);
+
+  let yBase = 630;
+
+  productos.forEach(p => {
+    drawText(p.cantidad,160,yBase);
+
+    const lines = wrapText(p.concepto.toUpperCase(),370);
+    lines.forEach((l,i)=>drawText(l,250,yBase-(i*12)));
+
+    drawText(`$ ${Number(p.valor).toLocaleString()}`,655,yBase);
+    yBase -= (lines.length * 12) + 13;
   });
+
+  const subtotal = productos.reduce((s,p)=>s+(p.valor*p.cantidad),0);
+  const abono = Number(form.get('abono')||0);
+  const total = subtotal - abono;
+
+  if(abono) drawText(`$ ${abono.toLocaleString()}`,655,390);
+  drawText(`$ ${subtotal.toLocaleString()}`,655,420);
+  drawText(`$ ${total.toLocaleString()}`,655,370);
+
+  const finalPdf = await pdfDoc.save();
+  const blob = new Blob([finalPdf], { type: 'application/pdf' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'CuentaDeCobro.pdf';
+  a.click();
+});
 </script>
 
-
-  <script>
-    // Set default date
-    const hoy = new Date();
-    const offset = hoy.getTimezoneOffset(); // en minutos
-    hoy.setMinutes(hoy.getMinutes() - offset); // corrige desfase
-    document.querySelector('input[name="fecha"]').value = hoy.toISOString().slice(0, 10);
-
-    function agregarProducto() {
-      const container = document.getElementById("productos");
-      const div = document.createElement("div");
-      div.classList.add("producto");
-      div.innerHTML = `
-        <label>Cantidad</label>
-        <input name="cantidad" type="number" required>
-        <label>Concepto</label>
-        <input name="concepto" required>
-        <label>Valor</label>
-        <input name="valor" type="number" required>
-        <button type="button" class="remove-producto" onclick="eliminarProducto(this)">Eliminar</button>
-      `;
-      container.appendChild(div);
-    }
-
-    function eliminarProducto(boton) {
-      const productoDiv = boton.closest('.producto');
-      productoDiv.remove();
-    }
-
-   document.getElementById('cotizacionForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const formData = new FormData(e.target);
-      const [anio, mes, dia] = formData.get("fecha").split("-").map(Number);
-      const consecutivo = formData.get("consecutivo");
-
-      const abono = parseFloat(formData.get("abono") || 0);
-      const nombreEmpresa = formData.get("nombreEmpresa");
-      const tipoId = formData.get("tipoId");
-      const identificacion = formData.get("identificacion");
-      const direccionEmpresa = formData.get("direccionEmpresa");
-      const telefonoEmpresa = formData.get("telefonoEmpresa");
-      const ciudadEmpresa = formData.get("ciudadEmpresa");
-
-      const productos = [];
-      const cantidadElems = document.querySelectorAll('input[name="cantidad"]');
-      const conceptoElems = document.querySelectorAll('input[name="concepto"]');
-      const valorElems = document.querySelectorAll('input[name="valor"]');
-
-      for (let i = 0; i < cantidadElems.length; i++) {
-        productos.push({
-          cantidad: parseInt(cantidadElems[i].value),
-          concepto: conceptoElems[i].value,
-          valor: parseFloat(valorElems[i].value),
-        });
-      }
-
-      const subtotal = productos.reduce((sum, p) => sum + (p.valor * p.cantidad), 0);
-      const total = subtotal - abono;
-
-      const response = await fetch("/.netlify/functions/get-pdf");
-      const buffer = await response.arrayBuffer();
-      const existingPdfBytes = new Uint8Array(buffer);
-      const { PDFDocument, rgb } = PDFLib;
-      const pdfDoc = await PDFDocument.load(existingPdfBytes);
-      const page = pdfDoc.getPages()[0];
-
-      const drawText = (text, x, y) => {
-        page.drawText(String(text), { x, y, size: 10, color: rgb(0, 0, 0) });
-      };
-
-      // Fecha y consecutivo
-      drawText(dia, 120, 950);
-      drawText(mes, 165, 950);
-      drawText(anio, 198, 950);
-      drawText(consecutivo, 265, 950);
-
-      // Info empresa
-      drawText(nombreEmpresa, 120, 750);
-      drawText(identificacion, 510, 750);
-      if (tipoId === 'cc') drawText('X', 390, 750);
-      if (tipoId === 'nit') drawText('X', 445, 750);
-      drawText(direccionEmpresa, 170, 713);
-      drawText(telefonoEmpresa, 360, 713);
-      drawText(ciudadEmpresa, 530, 713);
-
-      // Productos (espaciados verticalmente)
-      /*
-      let yBase = 630;
-      productos.forEach((p, i) => {
-        drawText(p.cantidad, 160, yBase);
-        drawText(p.concepto, 250, yBase);
-        drawText(`$ ${p.valor.toLocaleString()}`, 655, yBase);
-        yBase -= 25;
-      });*/
-
-      // Productos con salto de línea en concepto
-        let yBase = 630;
-
-        productos.forEach((p) => {
-
-          // Cantidad (siempre una sola línea)
-          drawText(p.cantidad, 160, yBase);
-
-          // Wrap del concepto
-          const maxChars = 90; // ajusta si lo necesitas
-          const concepto = p.concepto;
-          const lineas = [];
-
-          for (let i = 0; i < concepto.length; i += maxChars) {
-            lineas.push(concepto.slice(i, i + maxChars));
-          }
-
-          lineas.forEach((linea, idx) => {
-            const y = yBase - (idx * 12); // espacio entre líneas
-            drawText(linea, 250, y);
-          });
-
-          // Valor (solo en primera línea)
-          drawText(`$ ${p.valor.toLocaleString()}`, 655, yBase);
-
-          // Ajuste total consumido
-          yBase -= (lineas.length * 12) + 13;
-        });
-
-      if (abono) drawText(`$ ${abono.toLocaleString()}`, 655, 390);
-      drawText(`$ ${subtotal.toLocaleString()}`, 655, 420);
-      drawText(`$ ${total.toLocaleString()}`, 655, 370);
-
-      const pdfBytes = await pdfDoc.save();
-      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      const fechaStr = `${String(dia).padStart(2, '0')}${String(mes).padStart(2, '0')}${anio}`;
-      const nombreLimpio = nombreEmpresa.trim().replace(/\s+/g, '_').replace(/[^\w\d_-]/g, '');
-      const nombreArchivo = `CuentaDeCobro-${fechaStr}-${nombreLimpio}.pdf`;
-
-      link.download = nombreArchivo;
-
-      link.click();
-    });
-  </script>
 </body>
 </html>
