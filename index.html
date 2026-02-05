@@ -191,6 +191,13 @@ button:hover {
 </head>
 <body>
 
+  <div class="tab-wrapper">
+    <ul>
+      <li><a class="cuentaCobro" href="index.html" data-tab="index">Cuenta de Cobro</a></li>
+      <li><a class="cotizacion" href="cotizacion.html" data-tab="cotizacion">Cotizaciones</a></li>
+    </ul>
+  </div>
+
 <form id="cotizacionForm">
   <h2>Generar Cuenta de Cobro</h2>
 
@@ -247,6 +254,19 @@ button:hover {
 
   <button type="submit">Descargar Cuenta de Cobro</button>
 </form>
+
+<script>
+  const pathname = window.location.pathname;
+  let path = pathname.substring(pathname.lastIndexOf('/') + 1).replace('.html', '');
+
+  if (path === '') path = 'index';
+
+  document.querySelectorAll('ul li a').forEach(link => {
+    if (link.dataset.tab === path) {
+      link.classList.add('active');
+    }
+  });
+</script>
 
 <script>
 const hoy = new Date();
