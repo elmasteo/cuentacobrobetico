@@ -363,7 +363,7 @@ document.getElementById('cotizacionForm').addEventListener('submit', async (e) =
   if(abono) drawText(`$ ${abono.toLocaleString()}`,655,390);
   drawText(`$ ${subtotal.toLocaleString()}`,655,420);
   drawText(`$ ${total.toLocaleString()}`,655,370);
-  drawText(llave,610,240);
+  drawText(llave,580,250);
 
   const finalPdf = await pdfDoc.save();
   const blob = new Blob([finalPdf], { type: 'application/pdf' });
